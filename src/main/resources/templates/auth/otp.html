@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <h1>OTP</h1>
+  <form th:action="@{/auth/otp-proc}" class="form-signin" method="post">
+      <input type="text" name="otpCode" placeholder="OTP 코드">
+      <button type="submit">로그인</button>
+  </form>
+</body>
+</html>

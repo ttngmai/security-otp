@@ -1,0 +1,34 @@
+spring:
+  session:
+    store-type: jdbc
+
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/otp
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+
+  security:
+    user:
+      name: user
+      password: 1234
+
+logging.level:
+  org.hibernate.SQL: debug
+
+server:
+  servlet:
+    session:
+      timeout: 60m
+
+custom:
+  otp-issuer: 'Dozn-Tobi-Feature'
+  path:
+    qr-images: 'C:/tobi/qrcode/'
