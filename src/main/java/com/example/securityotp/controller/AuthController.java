@@ -85,4 +85,9 @@ public class AuthController {
             return "auth/otp";
         }
     }
+
+    @GetMapping("/logout")
+    public String logout() {
+        return "auth/logout";
+    }
 }

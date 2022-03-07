@@ -1,21 +1,30 @@
 package com.example.securityotp.config;
 
+import com.example.securityotp.security.metadatasource.UrlSecurityMetadataSource;
 import com.example.securityotp.security.provider.CustomAuthenticationProvider;
 import com.example.securityotp.security.service.LoginFailureHandler;
 import com.example.securityotp.security.service.LoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.vote.AffirmativeBased;
+import org.springframework.security.access.vote.RoleVoter;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
+
+import java.util.Arrays;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Configuration
@@ -23,9 +32,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final LoginSuccessHandler loginSuccessHandler;
     private final LoginFailureHandler loginFailureHandler;
-
-    @Autowired
-    private UserDetailsService userDetailsService;
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -35,7 +41,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authenticationProvider());
-//        auth.userDetailsService(userDetailsService);
+    }
+
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 
     @Override
@@ -47,9 +57,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .expiredUrl("/auth/login");
 
         http
-                .authorizeRequests()
-                .anyRequest().authenticated()
-            .and()
+                .authorizeRequests();
+
+//        http
+//                .authorizeRequests()
+//                .antMatchers("/auth/register").permitAll()
+//                .antMatchers("/auth/otp").hasAuthority("ROLE_PRE_VERIFICATION")
+//                .antMatchers("/", "/auth/logout").hasAuthority("ROLE_POST_VERIFICATION")
+//                .anyRequest().authenticated();
+
+        http
                 .formLogin()
                 .loginPage("/auth/login")
                 .loginProcessingUrl("/login-proc")
@@ -60,7 +77,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutSuccessUrl("/auth/login")
                 .deleteCookies("SESSION", "JSESSIONID")
-                .invalidateHttpSession(true);
+                .invalidateHttpSession(true)
+            .and()
+                .addFilterBefore(customFilterSecurityInterceptor(), FilterSecurityInterceptor.class);
     }
 
     @Bean
@@ -71,5 +90,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public FilterSecurityInterceptor customFilterSecurityInterceptor() throws Exception {
+        FilterSecurityInterceptor filterSecurityInterceptor = new FilterSecurityInterceptor();
+        filterSecurityInterceptor.setSecurityMetadataSource(urlInvocationSecurityMetadataSource());
+        filterSecurityInterceptor.setAccessDecisionManager(affirmativeBased());
+        filterSecurityInterceptor.setAuthenticationManager(authenticationManagerBean());
+
+        return filterSecurityInterceptor;
+    }
+
+    @Bean
+    public FilterInvocationSecurityMetadataSource urlInvocationSecurityMetadataSource() {
+        return new UrlSecurityMetadataSource();
+    }
+
+    @Bean
+    public AccessDecisionManager affirmativeBased() {
+        return new AffirmativeBased(getAccessDecisionVoters());
+    }
+
+    private List<AccessDecisionVoter<?>> getAccessDecisionVoters() {
+        return Arrays.asList(new RoleVoter());
     }
 }

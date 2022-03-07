@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class OtpTokenValidator {
-    public static boolean validate(String inputCode, String secretKey) {
-        String totpCode = getOtpCode(secretKey);
+    public static boolean validate(String inputOtpCode, String secretKey) {
+        String otpCode = getOtpCode(secretKey);
 
-        return totpCode.equals(inputCode);
+        return otpCode.equals(inputOtpCode);
     }
 
     public static String getOtpCode(String secretKey) {

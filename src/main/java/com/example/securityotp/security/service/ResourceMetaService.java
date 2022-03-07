@@ -2,20 +2,26 @@ package com.example.securityotp.security.service;
 
 import com.example.securityotp.dto.AuthoritiesDto;
 import com.example.securityotp.repository.ResourceQueryRepository;
+import com.example.securityotp.sampledata.InitData;
 import com.example.securityotp.security.envent.AuthoritiesEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Slf4j
+@Service
 public class ResourceMetaService {
     @Autowired
     private ResourceQueryRepository resourceQueryRepository;
 
     @Autowired
     private ApplicationContext applicationContext;
+
+    @Autowired
+    InitData initData;
 
     public void findAllResources() {
         List<AuthoritiesDto> authorities = resourceQueryRepository.findAllAuthorities();

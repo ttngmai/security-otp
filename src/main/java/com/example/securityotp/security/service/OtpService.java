@@ -30,7 +30,7 @@ public class OtpService {
     private final OtpTokenValidator otpTokenValidator;
 
     @Transactional
-    public OtpResultDto verify(String totpCode, Authentication authentication) {
+    public OtpResultDto verify(String inputOtpCode, Authentication authentication) {
         Account loginAccount = (Account)authentication.getPrincipal();
         String username = loginAccount.getUsername();
         Account account = accountQueryRepository.findByUsername(username);
@@ -40,9 +40,7 @@ public class OtpService {
             throw new UsernameNotFoundException("존재하지 않는 사용자입니다.");
         }
 
-        String validOtpCode = otpTokenValidator.getOtpCode(account.getSecretKey());
-
-        if (totpCode.equals(validOtpCode)) {
+        if (otpTokenValidator.validate(inputOtpCode, account.getSecretKey())) {
             List<String> accountRoles = account.getAccountRoles()
                     .stream()
                     .map(accountRole -> accountRole.getRole().getName())

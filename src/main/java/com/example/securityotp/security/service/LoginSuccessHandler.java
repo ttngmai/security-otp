@@ -38,7 +38,7 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
             account.loginSuccess();;
         }
 
-        setDefaultTargetUrl("/");
+        setDefaultTargetUrl("/auth/otp");
 
         SavedRequest savedRequest = requestCache.getRequest(request, response);
 
