@@ -21,6 +21,7 @@ public class Role {
     private Long id;
 
     private String name;
+    private String description;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "role")
     private Set<AccountRole> accountRoles = new HashSet<>();

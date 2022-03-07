@@ -21,11 +21,17 @@ public class Resources {
     private Long id;
 
     private String name;
+    private String httpMethod;
+    private int orderNum;
+    private String type;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "resources")
     private Set<RoleResource> roleResources = new HashSet<>();
 
-    public Resources(String name) {
+    public Resources(String name, String httpMethod, int orderNum, String type) {
         this.name = name;
+        this.httpMethod = httpMethod;
+        this.orderNum = orderNum;
+        this.type = type;
     }
 }
