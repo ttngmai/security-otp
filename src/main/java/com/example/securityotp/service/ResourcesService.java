@@ -1,7 +1,8 @@
 package com.example.securityotp.service;
 
 import com.example.securityotp.entity.Resources;
-import com.example.securityotp.repository.ResourceRepository;
+import com.example.securityotp.repository.ResourcesQueryRepository;
+import com.example.securityotp.repository.ResourcesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -12,25 +13,26 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class ResourcesService {
-    private final ResourceRepository resourceRepository;
+    private final ResourcesRepository resourcesRepository;
+    private final ResourcesQueryRepository resourcesQueryRepository;
 
     @Transactional
     public Resources getResources(long id) {
-        return resourceRepository.findById(id).orElse(new Resources());
+        return resourcesRepository.findById(id).orElse(new Resources());
     }
 
     @Transactional
     public List<Resources> getResources() {
-        return resourceRepository.findAll(Sort.by(Sort.Order.asc("orderNum")));
+        return resourcesRepository.findAll(Sort.by(Sort.Order.asc("orderNum")));
     }
 
     @Transactional
     public void createResources(Resources resources){
-        resourceRepository.save(resources);
+        resourcesRepository.save(resources);
     }
 
     @Transactional
     public void deleteResources(long id) {
-        resourceRepository.deleteById(id);
+        resourcesRepository.deleteById(id);
     }
 }

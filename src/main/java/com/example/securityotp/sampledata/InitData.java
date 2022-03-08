@@ -34,9 +34,9 @@ public class InitData {
             em.persist(rolePreVerification);
             em.persist(rolePostVerification);
 
-            Resources resources1 = new Resources("/auth/otp", "get", 2, "url");
-            Resources resources2 = new Resources("/", "get", 1, "url");
-            Resources resources3 = new Resources("/auth/logout", "get", 3, "url");
+            Resources resources1 = new Resources("/auth/otp", "get", "url", 2);
+            Resources resources2 = new Resources("/", "get", "url", 1);
+            Resources resources3 = new Resources("/auth/logout", "get", "url", 3);
 
             em.persist(resources1);
             em.persist(resources2);

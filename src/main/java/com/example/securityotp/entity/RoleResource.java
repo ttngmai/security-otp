@@ -25,4 +25,9 @@ public class RoleResource {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "resource_id")
     private Resources resources;
+
+    public RoleResource(Role role, Resources resources) {
+        this.role = role;
+        this.resources = resources;
+    }
 }

@@ -1,11 +1,12 @@
 package com.example.securityotp.dto;
 
-import com.example.securityotp.entity.Role;
+import com.example.securityotp.entity.RoleResource;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -13,11 +14,11 @@ import java.util.Set;
 @Getter
 @Setter
 public class ResourcesDto {
-    private String id;
+    private Long id;
     private String name;
     private String httpMethod;
-    private int orderNum;
     private String type;
+    private int orderNum;
     private String roleName;
-    private Set<Role> roleSet;
+    private Set<RoleResource> roleResources = new HashSet<>();
 }

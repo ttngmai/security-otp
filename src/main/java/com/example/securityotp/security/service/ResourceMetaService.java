@@ -1,7 +1,7 @@
 package com.example.securityotp.security.service;
 
 import com.example.securityotp.dto.AuthoritiesDto;
-import com.example.securityotp.repository.ResourceQueryRepository;
+import com.example.securityotp.repository.ResourcesQueryRepository;
 import com.example.securityotp.sampledata.InitData;
 import com.example.securityotp.security.envent.AuthoritiesEvent;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +15,7 @@ import java.util.List;
 @Service
 public class ResourceMetaService {
     @Autowired
-    private ResourceQueryRepository resourceQueryRepository;
+    private ResourcesQueryRepository resourcesQueryRepository;
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -24,11 +24,11 @@ public class ResourceMetaService {
     InitData initData;
 
     public void findAllResources() {
-        List<AuthoritiesDto> authorities = resourceQueryRepository.findAllAuthorities();
+        List<AuthoritiesDto> authorities = resourcesQueryRepository.findAllAuthorities();
 
         authorities.stream().forEach(authoritiesDto -> {
-            log.info("role name {} ", authoritiesDto.getRoleName());
-            log.info("url {}", authoritiesDto.getUrl());
+            log.info("role name: {}", authoritiesDto.getRoleName());
+            log.info("url: {}", authoritiesDto.getUrl());
         });
 
         applicationContext.publishEvent(new AuthoritiesEvent(this, authorities));
