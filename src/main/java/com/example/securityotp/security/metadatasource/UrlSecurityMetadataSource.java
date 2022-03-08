@@ -36,10 +36,13 @@ public class UrlSecurityMetadataSource implements FilterInvocationSecurityMetada
             return null;
         }
 
-        List<String> roles = authoritiesDtos.stream().map(AuthoritiesDto::getRoleName).collect(Collectors.toList());
+//        List<String> roles = authoritiesDtos.stream().map(AuthoritiesDto::getRoleName).collect(Collectors.toList());
+//
+//        String[] stockArr = new String[roles.size()];
+//        stockArr = roles.toArray(stockArr);
+//
 
-        String[] stockArr = new String[roles.size()];
-        stockArr = roles.toArray(stockArr);
+        String[] stockArr = new String[3];
 
         return SecurityConfig.createList(stockArr);
     }
