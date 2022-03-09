@@ -1,14 +1,15 @@
 package com.example.securityotp.security.service;
 
-import com.example.securityotp.dto.AuthoritiesDto;
 import com.example.securityotp.entity.RoleResource;
 import com.example.securityotp.repository.ResourcesQueryRepository;
-import com.example.securityotp.sampledata.InitData;
+import com.example.securityotp.init.SampleDataLoad;
 import com.example.securityotp.security.envent.AuthoritiesEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.access.SecurityConfig;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.stereotype.Service;
 
@@ -26,19 +27,28 @@ public class ResourceMetaService {
     private ApplicationContext applicationContext;
 
     @Autowired
-    InitData initData;
+    SampleDataLoad sampleDataLoad;
 
     public void findAllResources() {
-        LinkedHashMap<RequestMatcher, List<ConfigAttribute>> result = new LinkedHashMap<>();
+        LinkedHashMap<RequestMatcher, List<ConfigAttribute>> map = new LinkedHashMap<>();
         List<RoleResource> roleResources = resourcesQueryRepository.findAllRoleResource();
 
-//        authorities.stream().forEach(authoritiesDto -> {
-//            log.info("role name: {}", authoritiesDto.getRoleName());
-//            log.info("url: {}", authoritiesDto.getUrl());
-//        });
+        for (RoleResource roleResource : roleResources) {
+            RequestMatcher requestMatcher = new AntPathRequestMatcher(roleResource.getResources().getName());
 
-        List<AuthoritiesDto> authorities = new ArrayList<>();
+            if (map.containsKey(requestMatcher)) {
+                List<ConfigAttribute> roles = map.get(requestMatcher);
 
-        applicationContext.publishEvent(new AuthoritiesEvent(this, authorities));
+                roles.add(new SecurityConfig(roleResource.getRole().getName()));
+                map.replace(requestMatcher, roles);
+            } else {
+                List<ConfigAttribute> configAttributes = new ArrayList<>();
+
+                configAttributes.add(new SecurityConfig(roleResource.getRole().getName()));
+                map.put(requestMatcher, configAttributes);
+            }
+        }
+
+        applicationContext.publishEvent(new AuthoritiesEvent(this, map));
     }
 }

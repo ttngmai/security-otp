@@ -1,14 +1,12 @@
 package com.example.securityotp.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -28,8 +26,4 @@ public class Role {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "role")
     private Set<RoleResource> roleResources = new HashSet<>();
-
-    public Role(String name) {
-        this.name = name;
-    }
 }

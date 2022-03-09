@@ -1,28 +1,23 @@
 package com.example.securityotp.security.envent;
 
-import com.example.securityotp.dto.AuthoritiesDto;
 import org.springframework.context.ApplicationListener;
+import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.stereotype.Component;
 
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Component
 public class AuthoritiesManager implements ApplicationListener<AuthoritiesEvent> {
-    private Map<String, List<AuthoritiesDto>> authorities;
+    private LinkedHashMap<RequestMatcher, List<ConfigAttribute>> authorities;
 
-    public Map<String, List<AuthoritiesDto>> getAuthorities() {
+    public LinkedHashMap<RequestMatcher, List<ConfigAttribute>> getAuthorities() {
         return authorities;
-    }
-
-    public List<AuthoritiesDto> getAuthorities(String key) {
-        return authorities.get(key);
     }
 
     @Override
     public void onApplicationEvent(AuthoritiesEvent event) {
-        authorities = event.getAuthoritiesDto()
-                .stream().collect(Collectors.groupingBy(AuthoritiesDto::getUrl, Collectors.toList()));
+        authorities = event.getAuthoritiesDto();
     }
 }

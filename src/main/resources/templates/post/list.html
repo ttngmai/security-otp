@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>게시글 목록</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}" />
+    <script src="/js/bootstrap.bundle.js"></script>
+    <script src="/js/jquery-3.6.0.js"></script>
+</head>
+<body>
+<h1>게시글 목록</h1>
+
+<table id="post-table" class="table">
+    <tr>
+        <th>번호</th>
+        <th>제목</th>
+        <th>내용</th>
+    </tr>
+    <tr th:each="post : ${posts}">
+        <td th:text="${post.id}"></td>
+        <td th:text="${post.title}"></td>
+        <td th:text="${post.content}"></td>
+    </tr>
+</table>
+
+<div th:if="${!posts.isEmpty()}">
+    <nav th:with="pageNumber = ${posts.pageable.pageNumber},
+                  pageSize = ${posts.pageable.pageSize},
+                  totalPages = ${posts.totalPages},
+                  startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
+                  tempEndPage = ${startPage + pageSize - 1},
+                  endPage = ${tempEndPage > totalPages ? totalPages : tempEndPage}"
+         aria-label="Page navigation">
+        <ul class="pagination ">
+            <li th:classappend="${pageNumber + 1 <= pageSize + 1} ? 'disabled'" class="page-item">
+                <a class="page-link" th:href="@{/post(page=1)}">
+                    <span>&laquo;</span>
+                    <span class="sr-only">First</span>
+                </a>
+            </li>
+
+            <li th:classappend="${posts.first} ? 'disabled'" class="page-item">
+                <a class="page-link" th:href="${posts.first} ? '#' :@{/post(page=${posts.number})}" aria-label="Previous">
+                    <span aria-hidden="true">&lt;</span>
+                    <span class="sr-only">Previous</span>
+                </a>
+            </li>
+
+            <li th:each="page: ${#numbers.sequence(startPage, endPage)}" th:classappend="${page == pageNumber + 1} ? 'active'" class="page-item">
+                <a th:text="${page}" class="page-link" th:href="@{/post(page=${page})}"></a>
+            </li>
+
+            <li th:classappend="${posts.last} ? 'disabled'" class="page-item">
+                <a class="page-link" th:href="${posts.last} ? '#' : @{/post(page=${posts.number + 2})}" aria-label="Next">
+                    <span aria-hidden="true">&gt;</span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </li>
+
+            <li th:classappend="${T(java.lang.Math).floor(totalPages / 10) * 10 <= startPage} ? 'disabled'" class="page-item">
+                <a class="page-link" th:href="@{/post(page=${totalPages})}">
+                    <span>&raquo;</span>
+                    <span class="sr-only">First</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<form class="card-text">
+    <input id="page-number" placeholder="Page Number" type="text" class="form-control">
+    <button class="btn btn-outline-secondary" type="button" onclick="dataSend()">submit</button>
+</form>
+
+<script>
+    function dataSend() {
+        var page = $("#page-number").val();
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+
+        $.ajax({
+            beforeSend: function(xhr) {
+                if(token && header) {
+                    xhr.setRequestHeader(header, token);
+                }
+
+                console.log("pageNumber: " + page);
+            },
+            url: "/data",
+            contentType: 'application/json',
+            data: page,
+            type: "POST"
+        }).done(function(fragment) {
+            $("#post-table").replaceWith(fragment);
+        });
+    }
+</script>
+</body>
+</html>

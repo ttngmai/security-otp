@@ -1,18 +1,19 @@
 package com.example.securityotp.security.metadatasource;
 
-import com.example.securityotp.dto.AuthoritiesDto;
 import com.example.securityotp.security.envent.AuthoritiesManager;
 import com.example.securityotp.security.service.ResourceMetaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
-import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 public class UrlSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
     @Autowired
@@ -28,23 +29,19 @@ public class UrlSecurityMetadataSource implements FilterInvocationSecurityMetada
 
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
-        String url = ((FilterInvocation) object).getRequestUrl();
+        HttpServletRequest request = ((FilterInvocation) object).getRequest();
+        LinkedHashMap<RequestMatcher, List<ConfigAttribute>> requestMap = authoritiesManager.getAuthorities();
 
-        List<AuthoritiesDto> authoritiesDtos = authoritiesManager.getAuthorities().get(url);
-
-        if (authoritiesDtos == null) {
-            return null;
+        if (requestMap != null) {
+            for (Map.Entry<RequestMatcher, List<ConfigAttribute>> entry : requestMap.entrySet()) {
+                RequestMatcher matcher = entry.getKey();
+                if (matcher.matches(request)) {
+                    return entry.getValue();
+                }
+            }
         }
 
-//        List<String> roles = authoritiesDtos.stream().map(AuthoritiesDto::getRoleName).collect(Collectors.toList());
-//
-//        String[] stockArr = new String[roles.size()];
-//        stockArr = roles.toArray(stockArr);
-//
-
-        String[] stockArr = new String[3];
-
-        return SecurityConfig.createList(stockArr);
+        return null;
     }
 
     @Override

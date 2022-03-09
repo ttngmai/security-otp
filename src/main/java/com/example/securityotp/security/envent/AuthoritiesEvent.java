@@ -1,19 +1,21 @@
 package com.example.securityotp.security.envent;
 
-import com.example.securityotp.dto.AuthoritiesDto;
 import org.springframework.context.ApplicationEvent;
+import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class AuthoritiesEvent extends ApplicationEvent {
-    final List<AuthoritiesDto> authoritiesDto;
+    final LinkedHashMap<RequestMatcher, List<ConfigAttribute>> map;
 
-    public AuthoritiesEvent(Object source, List<AuthoritiesDto> authoritiesDto) {
+    public AuthoritiesEvent(Object source, LinkedHashMap<RequestMatcher, List<ConfigAttribute>> map) {
         super(source);
-        this.authoritiesDto = authoritiesDto;
+        this.map = map;
     }
 
-    public List<AuthoritiesDto> getAuthoritiesDto() {
-        return authoritiesDto;
+    public LinkedHashMap<RequestMatcher, List<ConfigAttribute>> getAuthoritiesDto() {
+        return map;
     }
 }
