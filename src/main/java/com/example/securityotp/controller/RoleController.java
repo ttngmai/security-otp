@@ -19,7 +19,7 @@ public class RoleController {
     private final RoleService roleService;
     private final RoleMapper roleMapper;
 
-    @GetMapping(value="/admin/roles")
+    @GetMapping("/admin/roles")
     public String getRoles(Model model) throws Exception {
 
         List<Role> roles = roleService.getRoles();
@@ -28,7 +28,7 @@ public class RoleController {
         return "admin/role/list";
     }
 
-    @GetMapping(value="/admin/roles/register")
+    @GetMapping("/admin/roles/register")
     public String viewRoles(Model model) throws Exception {
 
         RoleDto role = new RoleDto();

@@ -6,7 +6,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,7 +33,7 @@ public class Account implements Serializable {
     private LocalDateTime lastLogin;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "account")
-    private List<AccountRole> accountRoles = new ArrayList<>();
+    private Set<AccountRole> accountRoles = new HashSet<>();
 
     public void loginFail() {
         this.loginFailCount += 1;
