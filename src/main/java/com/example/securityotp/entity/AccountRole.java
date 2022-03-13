@@ -1,11 +1,9 @@
 package com.example.securityotp.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,16 +11,22 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "ACCOUNT_ROLE")
-public class AccountRole {
+public class AccountRole implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id", insertable = false, updatable = false)
+    @JoinColumn(name = "account_id")
     private Account account;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role_id", insertable = false, updatable = false)
+    @JoinColumn(name = "role_id")
     private Role role;
+
+    @Builder
+    public AccountRole(Account account, Role role) {
+        this.account = account;
+        this.role = role;
+    }
 }

@@ -1,11 +1,19 @@
 package com.example.securityotp.dto.account;
 
-import com.example.securityotp.dto.RoleDto;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class AccountDetailDto {
+    private Long id;
     private String username;
     private String password;
     private String secretKey;
@@ -13,5 +21,5 @@ public class AccountDetailDto {
     private int otpFailCount;
     private boolean isAccountNonLocked;
     private LocalDateTime lastLogin;
-    private Set<RoleDto> roles;
+    private List<String> roleNames;
 }

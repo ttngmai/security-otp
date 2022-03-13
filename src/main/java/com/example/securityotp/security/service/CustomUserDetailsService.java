@@ -2,7 +2,6 @@ package com.example.securityotp.security.service;
 
 import com.example.securityotp.entity.Account;
 import com.example.securityotp.repository.AccountQueryRepository;
-import com.example.securityotp.repository.AccountRepository;
 import com.example.securityotp.security.user.AccountContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -41,8 +40,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         roles.add(new SimpleGrantedAuthority("ROLE_PRE_VERIFICATION"));
 
-        AccountContext accountContext = new AccountContext(account, roles);
-
-        return accountContext;
+        return new AccountContext(account, roles);
     }
 }

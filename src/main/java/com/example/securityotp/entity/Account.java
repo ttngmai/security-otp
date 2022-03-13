@@ -35,6 +35,21 @@ public class Account implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "account")
     private Set<AccountRole> accountRoles = new HashSet<>();
 
+    @Builder
+    public Account(String username, String password, String secretKey, int loginFailCount, int otpFailCount, boolean isAccountNonLocked, LocalDateTime lastLogin) {
+        this.username = username;
+        this.password = password;
+        this.secretKey = secretKey;
+        this.loginFailCount = loginFailCount;
+        this.otpFailCount = otpFailCount;
+        this.isAccountNonLocked = isAccountNonLocked;
+        this.lastLogin = lastLogin;
+    }
+
+    public boolean isAccountNonLocked() {
+        return isAccountNonLocked;
+    }
+
     public void loginFail() {
         this.loginFailCount += 1;
 

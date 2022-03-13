@@ -3,15 +3,15 @@ package com.example.securityotp.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Entity
 @Table(name = "ROLE_RESOURCE")
-public class RoleResource {
+public class RoleResource implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
@@ -24,6 +24,7 @@ public class RoleResource {
     @JoinColumn(name = "resource_id")
     private Resources resources;
 
+    @Builder
     public RoleResource(Role role, Resources resources) {
         this.role = role;
         this.resources = resources;

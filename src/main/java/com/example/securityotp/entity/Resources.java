@@ -3,17 +3,17 @@ package com.example.securityotp.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Entity
 @Table(name = "RESOURCES")
-public class Resources {
+public class Resources implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
@@ -26,6 +26,7 @@ public class Resources {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "resources")
     private Set<RoleResource> roleResources = new HashSet<>();
 
+    @Builder
     public Resources(String name, String httpMethod, String type, int orderNum) {
         this.name = name;
         this.httpMethod = httpMethod;

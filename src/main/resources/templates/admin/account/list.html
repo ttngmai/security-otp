@@ -23,8 +23,8 @@
                         <a th:href="@{'/admin/accounts/' + ${account.id}}"><span th:text="${account.username}">회원</span></a>
                     </td>
                     <td style="text-align: left;">
-                        <span th:each="role, iter : ${account.userRoles}">
-                            <h6 th:text="${role.roleName}"></h6>
+                        <span th:each="roleName, iter : ${account.roleNames}">
+                            <h6 th:text="${roleName}"></h6>
                         </span>
                     </td>
                 </tr>

@@ -20,13 +20,11 @@ public class RoleService {
 
     @Transactional
     public List<Role> getRoles() {
-
         return roleRepository.findAll();
     }
 
     @Transactional
     public void createRole(Role role){
-
         roleRepository.save(role);
     }
 
