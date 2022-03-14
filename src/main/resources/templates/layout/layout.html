@@ -6,19 +6,19 @@
 <!--공통 헤드-->
 <th:block th:replace="/layout/fragments/head :: headFragment"></th:block>
 
-<body id="page-top">
-    <div id="wrapper">
+<body class="h-100">
+    <!--상단바-->
+    <th:block th:replace="/layout/fragments/top :: topbarFragment"></th:block>
+
+    <div class="d-flex">
         <!--사이드바-->
         <th:block th:replace="/layout/fragments/sidebar :: sidebarFragment"></th:block>
 
-        <div id="content-wrapper" class="d-flex flex-column">
-            <div id="content">
-                <!--상단바-->
-                <th:block th:replace="/layout/fragments/top :: topbarFragment"></th:block>
-
-                <!--본문-->
+        <!--본문-->
+        <div id="content-wrapper" class="d-flex flex-column flex-grow-1">
+            <main id="content" class="w-100 h-100 p-5">
                 <th:block layout:fragment="content"></th:block>
-            </div>
+            </main>
 
             <!--공통 하단-->
             <th:block th:replace="/layout/fragments/footer :: footerFragment"></th:block>

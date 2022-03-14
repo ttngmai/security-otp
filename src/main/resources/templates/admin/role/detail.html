@@ -1,13 +1,12 @@
+<!DOCTYPE html>
 <html lang="ko"
-      xmlns:th="http://www.thymeleaf.org">
-<html lang="en">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
 <head>
-    <meta charset="UTF-8">
     <title>권한 관리</title>
-    <link rel="stylesheet" th:href="@{/css/bootstrap.css}" />
-    <script src="/js/bootstrap.bundle.js"></script>
 </head>
-<body>
+<th:block layout:fragment="content">
     <form class="form-horizontal" th:action="@{/admin/roles}" method="post" th:object="${role}">
         <input th:type="hidden" name="id" th:value="*{id}" />
         <div class="form-group">
@@ -30,5 +29,5 @@
             </div>
         </div>
     </form>
-</body>
+</th:block>
 </html>

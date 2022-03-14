@@ -1,0 +1,12 @@
+#topbar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 279px;
+    z-index: 1030;
+    height: 4.5rem;
+}
+
+#topbar a.nav-link {
+    font-size: 18px;
+}

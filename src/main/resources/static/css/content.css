@@ -1,0 +1,6 @@
+#content-wrapper {
+    position: relative;
+    top: 4.5rem;
+    min-height: calc(100vh - 4.5rem);
+    padding-left: 279px;
+}

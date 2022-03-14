@@ -1,36 +1,31 @@
 <!DOCTYPE html>
 <html lang="ko"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
 <head>
-    <meta charset="UTF-8">
     <title>권한 목록</title>
-    <link rel="stylesheet" th:href="@{/css/bootstrap.css}" />
-    <script src="/js/bootstrap.bundle.js"></script>
 </head>
-<body>
-    <div id="maininner">
-        <div class="tbl_wrp">
-            <table class="table">
-                <thead>
-                <tr class="table-info">
-                    <th scope="col">권한명</th>
-                    <th scope="col">권한설명</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr class="link_btn hover" th:each="role : ${roles}">
+<th:block layout:fragment="content">
+    <table class="table">
+        <thead>
+        <tr class="table-info">
+            <th scope="col">권한명</th>
+            <th scope="col">권한설명</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="link_btn hover" th:each="role : ${roles}">
 
-                    <td style="text-align: left;">
-                        <a th:href="@{'/admin/roles/' + ${role.id}}"><span th:text="${role.name}">회원</span></a>
-                    </td>
-                    <td style="text-align: left;" th:text="${role.description}"></td>
-                </tr>
-                </tbody>
-            </table>
-            <div style="text-align:right;">
-                <p><a class="btn btn-dark btn-lg" style="margin:10;" th:href="@{/admin/roles/register}">권한 등록</a></p>
-            </div>
-        </div>
+            <td style="text-align: left;">
+                <a th:href="@{'/admin/roles/' + ${role.id}}"><span th:text="${role.name}">회원</span></a>
+            </td>
+            <td style="text-align: left;" th:text="${role.description}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div style="text-align:right;">
+        <p><a class="btn btn-dark btn-lg" style="margin:10;" th:href="@{/admin/roles/register}">권한 등록</a></p>
     </div>
-</body>
+</th:block>
 </html>

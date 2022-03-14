@@ -1,40 +1,35 @@
 <!DOCTYPE html>
 <html lang="ko"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
 <head>
-    <meta charset="UTF-8">
     <title>리소스 목록</title>
-    <link rel="stylesheet" th:href="@{/css/bootstrap.css}" />
-    <script src="/js/bootstrap.bundle.js"></script>
 </head>
-<body>
-    <div id="maininner">
-        <div class="tbl_wrp">
-            <table class="table">
-                <thead>
-                <tr class="table-info">
-                    <th scope="col">리소스명</th>
-                    <th scope="col">리소스타입</th>
-                    <th scope="col">HttpMethod</th>
-                    <th scope="col">순서</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr class="link_btn hover" th:each="resource : ${resources}">
+<th:block layout:fragment="content">
+    <table class="table">
+        <thead>
+        <tr class="table-info">
+            <th scope="col">리소스명</th>
+            <th scope="col">리소스타입</th>
+            <th scope="col">HttpMethod</th>
+            <th scope="col">순서</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="link_btn hover" th:each="resource : ${resources}">
 
-                    <td style="text-align: left;">
-                        <a th:href="@{'/admin/resources/' + ${resource.id}}"><span th:text="${resource.name}">회원</span></a>
-                    </td>
-                    <td style="text-align: left;" th:text="${resource.type}"></td>
-                    <td style="text-align: left;" th:text="${resource.httpMethod}"></td>
-                    <td style="text-align: left;" th:text="${resource.orderNum}"></td>
-                </tr>
-                </tbody>
-            </table>
-            <div style="text-align:right;">
-                <p><a class="btn btn-dark btn-lg" style="margin:10;" th:href="@{/admin/resources/register}">리소드 등록</a></p>
-            </div>
-        </div>
+            <td style="text-align: left;">
+                <a th:href="@{'/admin/resources/' + ${resource.id}}"><span th:text="${resource.name}">회원</span></a>
+            </td>
+            <td style="text-align: left;" th:text="${resource.type}"></td>
+            <td style="text-align: left;" th:text="${resource.httpMethod}"></td>
+            <td style="text-align: left;" th:text="${resource.orderNum}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div style="text-align:right;">
+        <p><a class="btn btn-dark btn-lg" style="margin:10;" th:href="@{/admin/resources/register}">리소드 등록</a></p>
     </div>
-</body>
+</th:block>
 </html>

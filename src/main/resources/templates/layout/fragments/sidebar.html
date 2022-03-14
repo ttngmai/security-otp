@@ -1,7 +1,23 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="sidebarFragment">
-    <ul id="accordionSidebar" class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion">
-    </ul>
+    <div id="sidebar-wrapper" class="flex-shrink-0">
+        <div class="logo d-flex justify-content-center align-items-center bg-white">
+            <img th:src="@{/img/logo.png}">
+        </div>
+        <nav id="sidebar" class="d-flex flex-column flex-nowrap h-100 bg-light">
+            <ul class="nav d-flex flex-column mb-auto">
+                <li class="nav-item">
+                    <a th:href="@{/user/one}" class="nav-link">User</a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/manager/one}" class="nav-link">Manager</a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/admin/one}" class="nav-link">Admin</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
 </th:block>
 </html>

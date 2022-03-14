@@ -1,0 +1,30 @@
+#sidebar-wrapper {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1031;
+    width: 279px;
+    height: 100vh;
+}
+
+#sidebar-wrapper .logo {
+    height: 4.5rem;
+}
+
+#sidebar-wrapper .logo img {
+    width: 125px;
+    height: 36px;
+}
+
+#sidebar {
+    background-color: #4e73df;
+    background-image: linear-gradient(180deg, #4e73df 10%, #224abe 100%);
+    background-size: cover;
+}
+
+#sidebar a.nav-link {
+    padding: 0.75rem 1.5rem;
+    font-size: 18px;
+    color: white;
+}
