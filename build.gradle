@@ -54,6 +54,9 @@ dependencies {
 	implementation 'de.taimos:totp:1.0'
 	implementation 'commons-codec:commons-codec'
 	implementation 'com.google.zxing:javase:3.4.0'
+
+	// thymeleaf-layout-dialect
+	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 }
 
 tasks.named('test') {
