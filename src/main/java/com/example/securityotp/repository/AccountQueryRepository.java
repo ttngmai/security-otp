@@ -1,22 +1,24 @@
 package com.example.securityotp.repository;
 
 import com.example.securityotp.dto.account.AccountDetailDto;
-import com.example.securityotp.entity.*;
+import com.example.securityotp.entity.Account;
+import com.example.securityotp.entity.AccountRole;
+import com.example.securityotp.entity.QAccount;
 import com.example.securityotp.mapper.AccountMapper;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.ConfigAttribute;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.example.securityotp.entity.QAccount.*;
-import static com.example.securityotp.entity.QAccountRole.*;
-import static com.example.securityotp.entity.QRole.*;
+import static com.example.securityotp.entity.QAccount.account;
+import static com.example.securityotp.entity.QAccountRole.accountRole;
+import static com.example.securityotp.entity.QRole.role;
 
 @RequiredArgsConstructor
 @Repository

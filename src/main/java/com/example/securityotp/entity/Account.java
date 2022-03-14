@@ -36,7 +36,8 @@ public class Account implements Serializable {
     private Set<AccountRole> accountRoles = new HashSet<>();
 
     @Builder
-    public Account(String username, String password, String secretKey, int loginFailCount, int otpFailCount, boolean isAccountNonLocked, LocalDateTime lastLogin) {
+    public Account(Long id, String username, String password, String secretKey, int loginFailCount, int otpFailCount, boolean isAccountNonLocked, LocalDateTime lastLogin) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.secretKey = secretKey;

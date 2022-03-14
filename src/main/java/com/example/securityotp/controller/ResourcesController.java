@@ -1,16 +1,13 @@
 package com.example.securityotp.controller;
 
-import com.example.securityotp.dto.ResourcesDto;
+import com.example.securityotp.dto.resource.ResourcesDetailDto;
 import com.example.securityotp.entity.Resources;
 import com.example.securityotp.entity.Role;
-import com.example.securityotp.mapper.ResourcesMapper;
-import com.example.securityotp.repository.RoleQueryRepository;
-import com.example.securityotp.repository.RoleRepository;
 import com.example.securityotp.security.metadatasource.UrlSecurityMetadataSource;
 import com.example.securityotp.service.ResourcesService;
-import com.example.securityotp.service.RoleResourceService;
 import com.example.securityotp.service.RoleService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,70 +16,77 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @Controller
 public class ResourcesController {
     private final ResourcesService resourcesService;
     private final RoleService roleService;
-    private final RoleRepository roleRepository;
-    private final RoleQueryRepository roleQueryRepository;
-    private final RoleResourceService roleResourceService;
-    private final ResourcesMapper resourcesMapper;
     private final UrlSecurityMetadataSource urlSecurityMetadataSource;
 
-    @GetMapping(value="/admin/resources")
-    public String getResources(Model model) throws Exception {
+    @GetMapping("/admin/resources")
+    public String getResources(Model model) {
         List<Resources> resources = resourcesService.getResources();
         model.addAttribute("resources", resources);
 
         return "admin/resource/list";
     }
 
-    @PostMapping(value="/admin/resources")
-    public String createResources(ResourcesDto resourcesDto) throws Exception {
-        Resources resources = resourcesMapper.dtoToEntity(resourcesDto);
-        Role role = roleQueryRepository.findByRoleName(resourcesDto.getRoleName());
+    @PostMapping("/admin/resources")
+    public String createResources(ResourcesDetailDto resourcesDetailDto) {
+        log.info("roleNames={}", resourcesDetailDto.getRoleNames());
 
-        resourcesService.createResources(resources);
-        roleResourceService.createRoleResource(role, resources);
+        resourcesService.createResources(resourcesDetailDto);
 
-        if("url".equals(resourcesDto.getType())){
-            urlSecurityMetadataSource.init();
+        if("url".equals(resourcesDetailDto.getType())){
+            urlSecurityMetadataSource.reload();
+        }
+
+        return "redirect:/admin/resources";
+    }
+
+    @PostMapping("/admin/resources/update")
+    public String updateResources(ResourcesDetailDto resourcesDetailDto) {
+        log.info("roleNames={}", resourcesDetailDto.getRoleNames());
+
+        resourcesService.updateResources(resourcesDetailDto);
+
+        if ("url".equals(resourcesDetailDto.getType())) {
+            urlSecurityMetadataSource.reload();
         }
 
         return "redirect:/admin/resources";
     }
 
     @GetMapping("/admin/resources/register")
-    public String viewRoles(Model model) throws Exception {
+    public String viewRoles(Model model) {
         List<Role> roleList = roleService.getRoles();
-        ResourcesDto resources = new ResourcesDto();
+        ResourcesDetailDto resourcesDetailDto = new ResourcesDetailDto();
 
         model.addAttribute("roleList", roleList);
-        model.addAttribute("resources", resources);
+        model.addAttribute("resources", resourcesDetailDto);
 
-        return "admin/resource/detail";
+        return "admin/resource/register";
     }
 
     @GetMapping("/admin/resources/{id}")
-    public String getResources(@PathVariable String id, Model model) throws Exception {
+    public String getResources(@PathVariable("id") String id, Model model) {
+        ResourcesDetailDto resources = resourcesService.getResources(Long.parseLong(id));
         List<Role> roleList = roleService.getRoles();
-        Resources resources = resourcesService.getResources(Long.valueOf(id));
-        ResourcesDto resourcesDto = resourcesMapper.entityToDto(resources);
 
-        model.addAttribute("resources", resourcesDto);
+        model.addAttribute("resources", resources);
         model.addAttribute("roleList", roleList);
 
         return "admin/resource/detail";
     }
 
     @GetMapping(value = "/admin/resources/delete/{id}")
-    public String removeResources(@PathVariable String id, Model model) throws Exception {
-        Resources resources = resourcesService.getResources(Long.valueOf(id));
-        resourcesService.deleteResources(Long.valueOf(id));
+    public String removeResources(@PathVariable("id") String id, Model model) {
+        ResourcesDetailDto resources = resourcesService.getResources(Long.parseLong(id));
+        resourcesService.deleteResources(Long.parseLong(id));
 
         if ("url".equals(resources.getType())) {
-            urlSecurityMetadataSource.init();
+            urlSecurityMetadataSource.reload();
         }
 
         return "redirect:/admin/resources";

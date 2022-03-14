@@ -23,7 +23,7 @@ public class UrlSecurityMetadataSource implements FilterInvocationSecurityMetada
     private AuthoritiesManager authoritiesManager;
 
     @PostConstruct
-    public void init() throws Exception {
+    public void reload() {
         resourceMetaService.findAllResources();
     }
 

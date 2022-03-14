@@ -10,7 +10,7 @@
 <body>
 <div id="maininner">
     <div class="tbl_wrp">
-        <form class="form-horizontal" th:action="@{/admin/resources/update}" method="post" th:object="${resources}">
+        <form class="form-horizontal" th:action="@{/admin/resources}" method="post" th:object="${resources}">
             <input th:type="hidden" name="id" th:value="*{id}"/>
 
             <div class="form-group">
@@ -53,7 +53,7 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-1 col-sm-10">
-                    <button type="Submit" class="btn btn-dark btn-lg">적용</button>
+                    <button type="Submit" class="btn btn-dark btn-lg">등록</button>
                     <a class="btn btn-dark btn-lg" style="margin:10;" th:href="@{/admin/resources}">목록 </a>
                     <a class="btn btn-dark btn-lg" style="margin:10;" th:href="@{'/admin/resources/delete/' + *{id}}">삭제</a>
                 </div>

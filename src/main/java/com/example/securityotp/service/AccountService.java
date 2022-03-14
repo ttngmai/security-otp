@@ -36,7 +36,7 @@ public class AccountService {
     }
 
     @Transactional
-    public AccountDetailDto getAccount(Long id) {
+    public AccountDetailDto getAccount(long id) {
         return accountQueryRepository.findAccountWithRoles(id);
     }
 

@@ -27,7 +27,8 @@ public class Resources implements Serializable {
     private Set<RoleResource> roleResources = new HashSet<>();
 
     @Builder
-    public Resources(String name, String httpMethod, String type, int orderNum) {
+    public Resources(Long id, String name, String httpMethod, String type, int orderNum) {
+        this.id = id;
         this.name = name;
         this.httpMethod = httpMethod;
         this.type = type;

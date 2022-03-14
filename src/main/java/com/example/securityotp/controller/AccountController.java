@@ -40,8 +40,8 @@ public class AccountController {
     }
 
     @GetMapping("/admin/accounts/{id}")
-    public String getAccount(@PathVariable("id") Long id, Model model) {
-        AccountDetailDto account = accountService.getAccount(id);
+    public String getAccount(@PathVariable("id") String id, Model model) {
+        AccountDetailDto account = accountService.getAccount(Long.parseLong(id));
         List<Role> roles = roleService.getRoles();
 
         model.addAttribute("account", account);
