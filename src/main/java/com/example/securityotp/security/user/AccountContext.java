@@ -10,7 +10,9 @@ public class AccountContext extends User {
     private final Account account;
 
     public AccountContext(Account account, Collection<? extends GrantedAuthority> authorities) {
-        super(account.getUsername(), account.getPassword(), authorities);
+        super(account.getUsername(), account.getPassword(),
+              true, true, true,
+              account.isAccountNonLocked(), authorities);
         this.account = account;
     }
 

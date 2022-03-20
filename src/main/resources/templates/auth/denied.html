@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <title>접근 권한 없음</title>
+</head>
+<th:block layout:fragment="content">
+    <h1><span th:text="${username}" class="alert alert-danger"></span></h1>
+    <br/>
+    <h3 th:text="${error}"></h3>
+</th:block>
+</html>

@@ -1,15 +1,23 @@
 <!DOCTYPE html>
 <html lang="ko"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>OTP</title>
 </head>
-<body>
-  <h1>OTP</h1>
-  <form th:action="@{/auth/otp-proc}" class="form-signin" method="post">
-      <input type="text" name="otpCode" placeholder="OTP 코드">
-      <button type="submit">로그인</button>
-  </form>
-</body>
+<th:block layout:fragment="content">
+    <h1>OTP</h1>
+    <form th:action="@{/auth/otp-proc}" method="post" style="max-width: 560px;">
+        <div class="mb-3">
+            <input type="text" name="otpCode" placeholder="OTP 코드" class="form-control">
+        </div>
+
+        <div th:if="${globalError}">
+            <p th:text="${globalError}" class="text-danger"></p>
+        </div>
+
+        <button type="submit" class="btn btn-outline-primary">인증</button>
+    </form>
+</th:block>
 </html>

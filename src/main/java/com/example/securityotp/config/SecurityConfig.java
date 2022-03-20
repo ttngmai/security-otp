@@ -2,6 +2,7 @@ package com.example.securityotp.config;
 
 import com.example.securityotp.security.metadatasource.UrlSecurityMetadataSource;
 import com.example.securityotp.security.provider.CustomAuthenticationProvider;
+import com.example.securityotp.security.service.CustomAccessDeniedHandler;
 import com.example.securityotp.security.service.LoginFailureHandler;
 import com.example.securityotp.security.service.LoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 
@@ -59,13 +61,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests();
 
-//        http
-//                .authorizeRequests()
-//                .antMatchers("/auth/register").permitAll()
-//                .antMatchers("/auth/otp").hasAuthority("ROLE_PRE_VERIFICATION")
-//                .antMatchers("/", "/auth/logout").hasAuthority("ROLE_POST_VERIFICATION")
-//                .anyRequest().authenticated();
-
         http
                 .formLogin()
                 .loginPage("/auth/login")
@@ -75,9 +70,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
             .and()
                 .logout()
+                .logoutUrl("/logout")
                 .logoutSuccessUrl("/auth/login")
                 .deleteCookies("SESSION", "JSESSIONID")
                 .invalidateHttpSession(true)
+            .and()
+                .exceptionHandling()
+                .accessDeniedHandler(accessDeniedHandler())
             .and()
                 .addFilterBefore(customFilterSecurityInterceptor(), FilterSecurityInterceptor.class);
     }
@@ -85,6 +84,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public AuthenticationProvider authenticationProvider() {
         return new CustomAuthenticationProvider();
+    }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        CustomAccessDeniedHandler accessDeniedHandler = new CustomAccessDeniedHandler();
+        accessDeniedHandler.setErrorPage("/auth/denied");
+
+        return accessDeniedHandler;
     }
 
     @Bean

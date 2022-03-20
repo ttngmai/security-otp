@@ -4,21 +4,18 @@ import com.example.securityotp.dto.OtpResultDto;
 import com.example.securityotp.entity.Account;
 import com.example.securityotp.otp.OtpTokenValidator;
 import com.example.securityotp.repository.AccountQueryRepository;
-import com.example.securityotp.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,16 +60,17 @@ public class OtpService {
 
             return new OtpResultDto(true, false, "");
         } else {
+            account.otpFail();
+
             String message = "OTP 코드가 올바르지 않습니다. 남은 횟수: " + account.otpRetryRemaining();
 
-            account.otpFail();
             log.info(username + " OTP fail at " + now.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + " : " + message);
 
             if (!account.isAccountNonLocked()) {
-                return new OtpResultDto(false, true, "");
+                return new OtpResultDto(false, true, message);
             }
 
-            return new OtpResultDto(false, false, "");
+            return new OtpResultDto(false, false, message);
         }
     }
 }

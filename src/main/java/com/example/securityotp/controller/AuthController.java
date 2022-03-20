@@ -5,18 +5,16 @@ import com.example.securityotp.dto.OtpResultDto;
 import com.example.securityotp.entity.Account;
 import com.example.securityotp.mapper.AccountMapper;
 import com.example.securityotp.otp.OtpTokenGenerator;
-import com.example.securityotp.repository.AccountRepository;
 import com.example.securityotp.security.service.OtpService;
 import com.example.securityotp.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AuthController {
     private final AccountService accountService;
     private final OtpService otpService;
-    private final AccountRepository accountRepository;
     private final AccountMapper accountMapper;
     private final PasswordEncoder passwordEncoder;
     private final OtpTokenGenerator otpTokenGenerator;
@@ -42,6 +39,7 @@ public class AuthController {
 
         account.setSecretKey(secretKey);
         account.setPassword(passwordEncoder.encode(account.getPassword()));
+        account.setAccountNonLocked(true);
         String imgPath = otpTokenGenerator.generateQRCode(secretKey, account.getUsername());
 
         System.out.println("imgPath = " + imgPath);
@@ -51,8 +49,8 @@ public class AuthController {
         return "redirect:/auth/login";
     }
 
-    @GetMapping("/login")
-    public String login() {
+    @RequestMapping(value = "/login", method = { RequestMethod.GET, RequestMethod.POST })
+    public String login(Model model) {
         return "auth/login";
     }
 
@@ -84,6 +82,17 @@ public class AuthController {
 
             return "auth/otp";
         }
+    }
+
+    @GetMapping("/denied")
+    public String accessDenied(@RequestParam(value = "error", required = false) String error, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Account account = (Account) authentication.getPrincipal();
+
+        model.addAttribute("username", account.getUsername());
+        model.addAttribute("error", error);
+
+        return "auth/denied";
     }
 
     @GetMapping("/logout")

@@ -61,13 +61,11 @@ public class SampleDataLoad {
             }
 
             Resources resource1 = createResourceIfNotFound("/auth/otp", "GET", "url", 1);
-            Resources resource2 = createResourceIfNotFound("/", "GET", "url", 1);
-            Resources resource3 = createResourceIfNotFound("/auth/logout", "GET", "url", 1);
+            Resources resource2 = createResourceIfNotFound("/auth/logout", "GET", "url", 1);
 
             if (roleResourceRepository.findAll().size() == 0) {
                 createRoleResource(rolePreVerification, resource1);
                 createRoleResource(rolePostVerification, resource2);
-                createRoleResource(rolePostVerification, resource3);
             }
 
             createPostsIfNotFound();
@@ -97,6 +95,7 @@ public class SampleDataLoad {
                         .username(username)
                         .password(passwordEncoder.encode(password))
                         .secretKey(secretKey)
+                        .isAccountNonLocked(true)
                         .build();
 
                 String imgPath = otpTokenGenerator.generateQRCode(secretKey, account.getUsername());

@@ -3,6 +3,7 @@ package com.example.securityotp.security.metadatasource;
 import com.example.securityotp.security.envent.AuthoritiesManager;
 import com.example.securityotp.security.service.ResourceMetaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
@@ -36,7 +37,8 @@ public class UrlSecurityMetadataSource implements FilterInvocationSecurityMetada
             for (Map.Entry<RequestMatcher, List<ConfigAttribute>> entry : requestMap.entrySet()) {
                 RequestMatcher matcher = entry.getKey();
                 if (matcher.matches(request)) {
-                    return entry.getValue();
+                    throw new AccessDeniedException("위험한 URL 미리 차단!");
+//                    return entry.getValue();
                 }
             }
         }

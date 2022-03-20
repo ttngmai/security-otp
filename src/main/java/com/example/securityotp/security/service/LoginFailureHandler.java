@@ -7,13 +7,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import java.io.IOException;
 
 @Slf4j
@@ -22,12 +25,13 @@ import java.io.IOException;
 public class LoginFailureHandler implements AuthenticationFailureHandler {
     private final AccountQueryRepository accountQueryRepository;
 
+    @Transactional
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         String username = request.getParameter("username");
         StringBuilder messageBuilder = new StringBuilder();
 
-        if (exception instanceof AuthenticationServiceException) {
+        if (exception instanceof UsernameNotFoundException) {
             messageBuilder.append("존재하지 않는 사용자입니다.");
 
         } else if (exception instanceof BadCredentialsException) {
@@ -35,7 +39,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
 
             Account account = accountQueryRepository.findByUsername(username);
 
-            if (account == null) {
+            if (account != null) {
                 account.loginFail();
                 messageBuilder.append(" 남은 횟수: ")
                         .append(account.loginRetryRemaining());
@@ -56,7 +60,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
         }
 
         request.setAttribute("globalError", messageBuilder.toString());
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/user/login");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/auth/login");
         dispatcher.forward(request, response);
     }
 }
