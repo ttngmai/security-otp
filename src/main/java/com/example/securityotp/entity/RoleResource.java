@@ -11,9 +11,10 @@ import java.io.Serializable;
 @Setter
 @Entity
 @Table(name = "ROLE_RESOURCE")
+@SequenceGenerator(name = "ROLE_RESOURCE_SEQ_GEN", sequenceName = "ROLE_RESOURCE_SEQ", initialValue = 1, allocationSize = 1)
 public class RoleResource implements Serializable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ROLE_RESOURCE_SEQ_GEN")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -11,9 +11,10 @@ import java.io.Serializable;
 @Setter
 @Entity
 @Table(name = "ACCOUNT_ROLE")
+@SequenceGenerator(name = "ACCOUNT_ROLE_SEQ_GEN", sequenceName = "ACCOUNT_ROLE_SEQ", initialValue = 1, allocationSize = 1)
 public class AccountRole implements Serializable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ACCOUNT_ROLE_SEQ_GEN")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

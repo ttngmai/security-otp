@@ -13,9 +13,10 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "ROLE")
+@SequenceGenerator(name = "ROLE_SEQ_GEN", sequenceName = "ROLE_SEQ", initialValue = 1, allocationSize = 1)
 public class Role implements Serializable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ROLE_SEQ_GEN")
     private Long id;
 
     private String name;

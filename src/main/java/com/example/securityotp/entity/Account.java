@@ -16,12 +16,13 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "ACCOUNT")
+@SequenceGenerator(name = "ACCOUNT_SEQ_GEN", sequenceName = "ACCOUNT_SEQ", initialValue = 1, allocationSize = 1)
 public class Account implements Serializable {
     private static final int LOGIN_RETRY_LIMIT = 5;
     private static final int OTP_RETRY_LIMIT = 5;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ACCOUNT_SEQ_GEN")
     private Long id;
 
     private String username;

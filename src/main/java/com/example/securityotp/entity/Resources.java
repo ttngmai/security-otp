@@ -13,9 +13,10 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "RESOURCES")
+@SequenceGenerator(name = "RESOURCES_SEQ_GEN", sequenceName = "RESOURCES_SEQ", initialValue = 1, allocationSize = 1)
 public class Resources implements Serializable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RESOURCES_SEQ_GEN")
     private Long id;
 
     private String name;

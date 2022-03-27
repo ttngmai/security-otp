@@ -4,13 +4,15 @@ import com.example.securityotp.entity.*;
 import com.example.securityotp.otp.OtpTokenGenerator;
 import com.example.securityotp.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -33,6 +35,7 @@ public class SampleDataLoad {
         private final AccountRoleRepository accountRoleRepository;
         private final ResourcesRepository resourcesRepository;
         private final RoleResourceRepository roleResourceRepository;
+        private final MenuRepository menuRepository;
         private final PostRepository postRepository;
         private final PasswordEncoder passwordEncoder;
         private final OtpTokenGenerator otpTokenGenerator;
@@ -68,6 +71,7 @@ public class SampleDataLoad {
                 createRoleResource(rolePostVerification, resource2);
             }
 
+            createMenusIfNotFound();
             createPostsIfNotFound();
         }
 
@@ -132,6 +136,7 @@ public class SampleDataLoad {
             return resourcesRepository.save(resources);
         }
 
+        @Transactional
         public void createRoleResource(Role role, Resources resources) {
             RoleResource roleResource = new RoleResource();
             roleResource.setRole(role);
@@ -150,6 +155,39 @@ public class SampleDataLoad {
                             .build();
 
                     postRepository.save(post);
+                }
+            }
+        }
+
+        @Transactional
+        public void createMenusIfNotFound() {
+            if (menuRepository.findAll().size() == 0) {
+                for (int i = 1; i < 4; i++) {
+                    Menu rootMenu = Menu.builder()
+                            .name("루트메뉴" + i)
+                            .url("/menu/" + i)
+                            .parent(null)
+                            .level(1)
+                            .orderNum(i)
+                            .build();
+
+                    menuRepository.save(rootMenu);
+                }
+
+                List<Menu> menus = menuRepository.findAll();
+
+                for (int i = 1; i < 4; i++) {
+                    for (int j = 1; j < 4; j++) {
+                        Menu childMenu = Menu.builder()
+                                .name("자식메뉴" + i + "-" + j)
+                                .url("/menu/" + i + "/" + j)
+                                .parent(menus.get(i - 1))
+                                .level(2)
+                                .orderNum(j)
+                                .build();
+
+                        menuRepository.save(childMenu);
+                    }
                 }
             }
         }
