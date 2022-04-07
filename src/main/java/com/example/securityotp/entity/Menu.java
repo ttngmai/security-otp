@@ -23,11 +23,12 @@ public class Menu {
     private String url;
     private int level;
     private int orderNum;
+    private boolean useYn;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private Menu parent;
-
-    @OneToMany(mappedBy = "parent")
-    private List<Menu> children = new ArrayList<>();
+//
+//    @OneToMany(mappedBy = "parent")
+//    private List<Menu> children = new ArrayList<>();
 }

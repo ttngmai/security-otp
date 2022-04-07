@@ -16,9 +16,9 @@ import java.util.List;
 public class MenuController {
     private final MenuService menuService;
 
-    @ResponseBody
-    @GetMapping
-    public List<MenuDto> menu() {
-        return menuService.findAllMenu();
-    }
+//    @ResponseBody
+//    @GetMapping
+//    public List<MenuDto> menu() {
+//        return menuService.findAllMenu();
+//    }
 }
